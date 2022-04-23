@@ -1,185 +1,190 @@
-import pandas as pd
+import random as rd
+import statistics
 import numpy as np
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from termcolor import colored
 
-import os 
 
-csv_path = "././polls/csv/"
-mainDf = pd.read_csv(os.path.join(csv_path,"swlcsv.csv"), sep=";")
+#Proba Attack Dice
+AttName = ['crit' , 'touche' , 'adre' , 'miss']
+AttWhite = [1,1,1,5]
+AttBlack = [1,3,1,3]
+AttRed = [1,5,1,1]
+#Proba Defence Dice
+AttName = ['def' , 'adre' , 'miss']
+DefWhite = [1,1,4]
+DefRed = [3,1,2]
 
-def function_resize_for_bins(List):
-    returnList = []
-    for i in List:
-        if (i<5):
-            returnList.append(0.1)
-        elif (i<10):
-            returnList.append(0.3)
-        elif (i<15):
-            returnList.append(0.7)
-        elif (i<20):
-            returnList.append(0.9)
-        else :
-            returnList.append(1)
-    return returnList
-        
-#Function For calculation Dice probability
-def calculate_y_proba_dice(player='b',attOrDef='att',colorDice='r',round=None):
+#Precalculation for easier code 
+
+NumberHitsAttRed = 5
+NumberHitsAttBlack = 3
+NumberHitsAttWhite = 1
+
+NumberHitsDefRed = 3
+NumberHitsDefWhite = 1
+
+# 1 = CRIT 
+# 2 = ADRE
+# 3-x = TOUCHE
+
+# ListThrow [crits,hits,Miss]
+
+
+# 1 = ADRE
+# 2 - x = TOUCHE
+
+# ListThrow [Def,Miss]
+
+def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
+    tmp=0
+    random = rd.randint(1,8)
+    if random == 1:
+        ListThrow[0]+=1
+        return 1 ,NumberCritical,ListThrow
     
-    df = mainDf.copy()
+    elif 3<= random <3+NumberHits:
+        ListThrow[1]+=1
+        return 1,NumberCritical,ListThrow
+    
+    elif random ==2:
+        if AdreCrit:
+            ListThrow[0]+=1
+            return 1,NumberCritical,ListThrow
+        elif NumberCritical >0:
+            ListThrow[0]+=1
+            NumberCritical-=1
+            return 1,NumberCritical,ListThrow
+        elif Adre:
+            ListThrow[1]+=1
+            return 1,NumberCritical,ListThrow
+        else:
+            ListThrow[2]+=1
+            return 0,NumberCritical,ListThrow
 
-    #Blue Player 
-    if player:
-        df = df[df["player"]==player]
+    else :
+        ListThrow[2]+=1
+        return 0,NumberCritical,ListThrow
     
-    if colorDice :
-        df= df[df["couleur"]==colorDice]
-        
-    if attOrDef:
-        df = df[df["att/def"]==attOrDef]
+
+
     
-    if round :
-        df = df[df["round"]==round]
-        
-    sumdf = df.sum()
+def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,AdreCrit=False , Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0):
+    
+    print("numberAttWhiteDice : ",numberAttWhiteDice)
+    print("numberAttBlackDice : ",numberAttBlackDice)
+    print("numberAttRedDice   : ",numberAttRedDice)
+    print("AdreCrit           : ",AdreCrit)
+    print("Adre               : ",Adre)
+    print("critiqueNumber     : ",critiqueNumber)
+
+    listEsperance =[]
+    listCrits = []
+    listHits = []
+    listMiss = []
     
     if (attOrDef =='att'):
         
-        if(len(df)!=0):
-            return [sumdf["critique"]/len(df),sumdf["touche"]/len(df),sumdf["adrenaline"]/len(df),sumdf["miss"]/len(df)],len(df)
-        else : 
-            return [0,0,0,0],0
-        
-    elif (attOrDef =='def'):
-        
-        if(len(df)!=0):
-            return [sumdf["block"]/len(df),sumdf["adrenaline"]/len(df),sumdf["miss"]/len(df)],len(df)
-        else : 
-            return [0,0,0],len(df)
-    
-    
-def count_number_dice(player='b',attOrDef='att',colorDice='r',round=None):
-    
-    df = mainDf.copy()
-    
-    #Blue Player 
-    if player:
-        df = df[df["player"]==player]
-    
-    if colorDice :
-        df= df[df["couleur"]==colorDice]
-        
-    if attOrDef:
-        df = df[df["att/def"]==attOrDef]
-    
-    if round :
-        df = df[df["round"]==round]
-        
-    
-        
-    return len(df)
-
-def count_number_dice_with_df(df,player='b',attOrDef='att',colorDice='r',round=None):
-    
-    #Blue Player 
-    if player:
-        df = df[df["player"]==player]
-    
-    if colorDice :
-        df= df[df["couleur"]==colorDice]
-        
-    if attOrDef:
-        df = df[df["att/def"]==attOrDef]
-    
-    if round :
-        df = df[df["round"]==round]
-        
-    df = df.reset_index()
-
-
-    index = df.index.tolist()
-
-    df['statValue'] = df['statValue'].astype(float)
-    StatsList = df["statValue"].tolist()
-    
-    
-    indexRound = []
-    serieGroupBy =df.groupby(['round']).size()
-
-    for i in range (len(serieGroupBy)):
-        somme=0
-        for j in range(i+1):
-            somme = somme + serieGroupBy[j+1]
-        indexRound.append(somme)
-
+        #NUMBER OF THROW:
+        for throw in range (numberThrow):
             
+            NumberCritical = critiqueNumber
+            esperance=0
+            ListThrow=[0,0,0]
+    
+            for i in range(numberAttWhiteDice):
+                result, NumberCritical,ListThrow = oneThrow(ListThrow,NumberHitsAttWhite,AdreCrit,NumberCritical,Adre)
+                esperance += result
+                
+            for i in range(numberAttBlackDice):
+                result, NumberCritical, ListThrow= oneThrow(ListThrow,NumberHitsAttBlack,AdreCrit,NumberCritical,Adre)
+                esperance += result
+                
+            for i in range(numberAttRedDice):
+                result, NumberCritical, ListThrow= oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,Adre)
+                esperance += result
+                
+
+            listEsperance.append(esperance)
+            listCrits.append(ListThrow[0])
+            listHits.append(ListThrow[1])
+            listMiss.append(ListThrow[2])
+            
+    
+        listEsperance = 1000*np.array(listEsperance)
+
+        listCrits = 1000*np.array(listCrits)
+        listHits = 1000*np.array(listHits)
+        listMiss = 1000*np.array(listMiss)
+
+        return statistics.mean(listEsperance)/1000,\
+        statistics.mean(listCrits)/1000,\
+        statistics.mean(listHits)/1000,\
+        statistics.mean(listMiss)/1000
+    
+
+
+
+
+def oneThrowDef(ListThrow,NumberHits,Adre):
+    tmp=0
+    random = rd.randint(1,6)
+
+    if 2<= random <2+NumberHits:
+        ListThrow[0]+=1
+        return 1,ListThrow
+    
+    elif random ==1:
+       
+        if Adre:
+            ListThrow[0]+=1
+            return 1,ListThrow
+        else:
+            ListThrow[1]+=1
+            return 0,ListThrow
+
+    else :
+        ListThrow[1]+=1
+        return 0,ListThrow
+
+  
+def throwDiceDEF(numberDefWhiteDice,numberDefRedDice, Adre=False,numberThrow=50000,attOrDef ='def'):
+    
+    print("numberAttWhiteDice : ",numberDefWhiteDice)
+    print("numberAttBlackDice : ",numberDefRedDice)
+    print("Adre               : ",Adre)
+
+    listEsperance =[]
+    listDef = []
+    listMiss = []
+    
+    if (attOrDef =='def'):
         
+        #NUMBER OF THROW:
+        for throw in range (numberThrow):
+            
+            esperance=0
+            ListThrow=[0,0]
+    
+            for i in range(numberDefWhiteDice):
+                result,ListThrow = oneThrowDef(ListThrow,NumberHitsDefWhite,Adre)
+                esperance += result
+                
+            for i in range(numberDefRedDice):
+                result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefRed,Adre)
+                esperance += result
+                
         
-    return index,StatsList,indexRound
 
-
-def number_tir_def_per_unit(df,color):
-
-    df = df[df["player"]==color]
-    listUnits = df["unité"].unique()
-    listUnits = listUnits[listUnits != 'supress']
+            listEsperance.append(esperance)
+            listDef.append(ListThrow[0])
+            listMiss.append(ListThrow[1])
+            
     
+        listEsperance = 1000*np.array(listEsperance)
 
+        listDef = 1000*np.array(listDef)
+        listMiss = 1000*np.array(listMiss)
 
-    mainUnitsListTir = []
-    mainUnitsListDef = []
-
-    for unit in listUnits :
-
-            listActualUnitTir=[]
-            listActualUnitDef=[]
-
-            dfUnits = df[df["unité"]==unit]
-
-            dfUnitsTir = dfUnits[dfUnits["att/def"]=="att"]
-
-            nombreDeTir = len(dfUnitsTir)
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==1]))
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==2]))
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==3]))
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==4]))
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==5]))
-            listActualUnitTir.append(len(dfUnitsTir[dfUnitsTir["round"]==6]))
-
-            dfUnitsDef = dfUnits[dfUnits["att/def"]=="def"]
-
-            nombreDeDef = len(dfUnitsDef)
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==1]))
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==2]))
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==3]))
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==4]))
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==5]))
-            listActualUnitDef.append(len(dfUnitsDef[dfUnitsDef["round"]==6]))
-
-            mainUnitsListTir.append(listActualUnitTir)
-            mainUnitsListDef.append(listActualUnitDef)
-
-    return listUnits,mainUnitsListTir,mainUnitsListDef
-
-
-def count_luck_per_round(df,player='b',attOrDef=None,round=None):
-    
-    #Blue Player 
-    if player:
-        df = df[df["player"]==player]
-    
-    if attOrDef:
-        df = df[df["att/def"]==attOrDef]
-    
-    if round :
-        df = df[df["round"]==round]
-    
-    if len(df) !=0 :
-        value = df['statValue'].mean()
-        return value
-    else : 
-        return 0
-
-        
+        return statistics.mean(listEsperance)/1000,\
+        statistics.mean(listDef)/1000,\
+        statistics.mean(listMiss)/1000
     

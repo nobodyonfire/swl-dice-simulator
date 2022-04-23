@@ -7,12 +7,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWL Stats</title>
+    <title>SWL Dice Simulator</title>
     <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/index.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/header.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/inputplayer.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/background.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/button.css' %}">
+ 
 
 </head>
 
@@ -20,259 +18,127 @@
 
 <body>
 
-  <div id = "title">
 
-    <div class="box-1">
-        <form action="stats" method="GET">
-            <button class="btn btn-one backgroundubtton" name = "gameStats" value="global" role="button"> 
-              <span>GAME STATS</span>
-            </button>        
-        </form>
-    </div>
-    <div class="box-1">
-      <form action="https://legionhq.thefifthtrooper.com/" >
-          <button class="btn btn-one backgroundubtton" name = "gameStats" value="global" role="button"> 
-            <span>ARMY BUILDER</span>
-          </button>        
+<div class = "maindiv">
+  <div class ="formcontainer">
+    <div class="header">
+
+      <h1>Dés Attaque</h1>
+      <form action="outputatt" method="POST">
+        {% csrf_token %}
+        <div class="form__group">
+          <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" />
+          <label for="name" class="form__label">Rouge Attack</label>
+        </div>
+        <div class="form__group">
+          <input type="number" name="natt" class="form__input" id="name" placeholder="Noir Attack"  />
+          <label for="name" class="form__label">Noir Attack</label>
+        </div>
+
+        <div class="form__group">
+          <input type="number" name="watt" class="form__input" id="name" placeholder="Blanc Attack"  />
+          <label for="name" class="form__label">Blanc Attack</label>
+        </div>
+
+        <h1>Adrenaline</h1>
+        <label class="container">Adre Crit
+          <input type="checkbox" name="adrecrit">
+          <span class="checkmark"></span>
+        </label>
+        <label class="container">Adre Touche
+          <input type="checkbox" name="adretouche">
+          <span class="checkmark"></span>
+        </label>
+
+        <div class="form__group">
+          <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  />
+          <label for="name" class="form__label">Critical</label>
+        </div>
+
+        <div class="form__group">
+          <button class="button-87" role="button">Valider</button>
+        </div>
+
       </form>
     </div>
-    <div class="box-1">
-      <form action="https://discord.gg/RfrtmFCf" >
-          <button class="btn btn-one backgroundubtton" name = 'discord' value="global" role="button"> 
-            <span>DISCORD</span>
-          </button>        
+
+
+    <div class="header2">
+      <h1>Dés Défense</h1>
+      <form action="outputdef" method="POST">
+        {% csrf_token %}
+        <div class="form__group">
+          <input type="number" name="rdef" class="form__input" id="name" placeholder="Rouge Defense" />
+          <label for="name" class="form__label">Rouge Defense</label>
+        </div>
+
+
+        <div class="form__group">
+          <input type="number" name="wdef" class="form__input" id="name" placeholder="Blanc Defense"  />
+          <label for="name" class="form__label">Blanc Defense</label>
+        </div>
+
+        <h1>Adrenaline</h1>
+        <label class="container">Adre Bouclier
+          <input type="checkbox" name="adredef" >
+          <span class="checkmark"></span>
+        </label>
+
+
+        <div class="form__group">
+          <button class="button-87" role="button">Valider</button>
+        </div>
+
       </form>
     </div>
-    <div class="box-1">
-      <form action="infos" method="GET">
-          <button class="btn btn-one backgroundubtton" name = "infos" value="global" role="button"> 
-            <span>INFOS</span>
-          </button>        
-      </form>
+  </div>
+
+  {% if output == True %}
+
+  {% if outputatt == True %}
+  <div class="result" id="tv">
+
+  <h1 id="black">Results :</h1>
+  <h2>Moyenne de Crit</h2>
+  <h3>{{crits}}</h3>
+  <br>  <br>
+  <h2>Moyenne de Touche</h2>
+  <h3>{{hits}}</h3>
+  <br>  <br>
+  <h2>Moyenne de Miss</h2>
+  <h3>{{miss}}</h3>
+  <br>  <br>
+
+  <h2>Nombre Moyenne de touche : </h2>
+  <h3>{{resultedEsperance}}</h3>
+
+  </div>
+  {% endif %}
+
+  {% if outputdef == True %}
+  <div class="result" id = 'tv'>
+
+    <h1 id="black">Results :</h1>
+    <h2>Moyenne de Defense</h2>
+    <h3>{{defs}}</h3>
+    <br>  <br>
+    <h2>Moyenne de Miss</h2>
+    <h3>{{miss}}</h3>
+    <br>  <br>
+  
+    <h2>Nombre Moyenne de Defense : </h2>
+    <h3>{{resultedEsperance}}</h3>
+  
     </div>
-
-  </div>
-
-
-
-  <div class="page">
-    <label class="field field_v2 ">
-      <input class="field__input" placeholder="Blue Player">
-      <span class="field__label-wrap">
-        <span class="field__label">Blue Player Name</span>
-      </span>
-    </label>
-    <label class="field field_v2">
-      <input class="field__input" placeholder="Red Player">
-      <span class="field__label-wrap">
-        <span class="field__label">Red Player Name</span>
-      </span>
-    </label>  
-  </div>
-
   
-
-  <div class = "tableau">
-    <table class="styled-table">
-      <thead>
-          <tr>  
-              <th></th>
-              <td>Total dice Launched</td>
-              <td>Number of attack dice Launched</td>
-              <td>Number of defence Launched</td>
-          </tr>
-      </thead>
-      <tbody>
-
-          <tr>
-              <td  class="playercol"> {{BluePlayer}}</td>
-              <td>{{numberDiceLaunchedBlue}}</td>
-              <td>{{numberDiceLaunchedBlueAtt}}</td>
-              <td>{{numberDiceLaunchedBlueDef}}</td>
-
-          </tr>
-          <tr >
-              <td  class="playercol">{{RedPlayer}}</td>
-              <td>{{numberDiceLaunchedRed}}</td>
-              <td>{{numberDiceLaunchedRedAtt}}</td>
-              <td>{{numberDiceLaunchedRedDef}}</td>
-          </tr>
-          <!-- and so on... -->
-      </tbody>
-  </table>  
+  {% endif %}
+  {% endif %}
 </div>
 
-<div class="lucktablea">
-
-
-  <div class = "tableau">
-    <table class="styled-table styled-tableblue">
-      <thead>
-          <tr>  
-              <th>{{BluePlayer}}</th>
-              <td>General</td>
-              <td>Attack</td>
-              <td>Defence</td>
-          </tr>
-      </thead>
-      <tbody>
-          <tr class="generalline">
-              <td  class="playercol"> Mean </td>
-              {% for general in luckBlueGeneral %}
-                <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round1 </td>
-            {% for general in luckBlueRound1 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round2 </td>
-            {% for general in luckBlueRound2 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round3 </td>
-            {% for general in luckBlueRound3 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round4 </td>
-            {% for general in luckBlueRound4 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round5 </td>
-            {% for general in luckBlueRound5 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round6 </td>
-            {% for general in luckBlueRound6 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-      </tbody>
-    </table>  
-  </div>
-  
-  
-  <div class = "tableau">
-    <table class="styled-table styled-tablered">
-      <thead>
-          <tr>   
-              <th>{{RedPlayer}}</th>
-              <td>General</td>
-              <td>Attack</td>
-              <td>Defence</td>
-          </tr>
-      </thead>
-      <tbody>
-          <tr class="generalline">
-              <td  class="playercol"> Mean </td>
-              {% for general in luckRedGeneral %}
-                <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round1 </td>
-            {% for general in luckRedRound1 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round2 </td>
-            {% for general in luckRedRound2 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round3 </td>
-            {% for general in luckRedRound3 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round4 </td>
-            {% for general in luckRedRound4 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round5 </td>
-            {% for general in luckRedRound5 %}
-              <td>{{general}} %</td>
-              {% endfor %}
-          </tr>
-          <tr>
-            <td  class="playercol"> Round6 </td>
-            {% for general in luckRedRound6 %}
-              <td>{{general}} %</td>
-            {% endfor %}
-          </tr>
-      </tbody>
-    </table>  
-  </div>
-</div>
-
-
-
-<div class="wrapper">
-  <div class="clip-text clip-text_one">Round 1</div>
-</div>
-    
-<!-- BEST THROW
-
-<div class = "tableau">
-  <table class="styled-table styled-tablegreen">
-    
-    <thead>
-        <tr >  
-            <th> Meilleurs jets </th>
-            <td>Joueur</td>
-            <td> Att / Def </td>
-            <td> Round </td>
-            <td> Unité </td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr >
-          <td  class="playercol"> 1 </td>
-          {% for general in 1BestThrow %}
-            <td>{{general}}</td>
-          {% endfor %}
-        </tr>
-        <tr >
-          <td  class="playercol"> 2 </td>
-          {% for general in 2BestThrow %}
-            <td>{{general}}</td>
-          {% endfor %}
-        </tr>
-        <tr>
-          <td  class="playercol"> 3 </td>
-          {% for general in 3BestThrow %}
-            <td>{{general}}</td>
-          {% endfor %}
-        </tr>
-   
-    </tbody>
-</table>  
-</div>
--->
 
 <script>
 
-var colorMatch = {
-    '0-19'     : 'red',
-    '20-59'    : 'orange',
-    '60-100'   : 'green'
- };
+
 
 
 </script>
@@ -283,7 +149,6 @@ var colorMatch = {
 
 
 </html>
-
 
 
 
