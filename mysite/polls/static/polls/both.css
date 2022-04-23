@@ -120,7 +120,7 @@ h3{
 #tv {
     position: relative;
     width: 350px;
-    height: 600px;
+    height: 700px;
     background: white;
     border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
     color: white;
@@ -241,3 +241,11 @@ h3{
       -ms-transform: rotate(45deg);
       transform: rotate(45deg);
     }
+
+#green{
+    color:#60b843;
+}
+
+#red{
+    color:#9a1a00;
+}

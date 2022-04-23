@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['swl-dice-simulator.herokuapp.com','127.0.0.1','swl-stats.herokuapp.com/']
 
-#CSRF_TRUSTED_ORIGINS = ['swl-dice-simulator.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['swl-dice-simulator.herokuapp.com']
 
 # Application definition
 
@@ -51,9 +51,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     
 ]
-#   'whitenoise.middleware.WhiteNoiseMiddleware',
+ 
 
 ROOT_URLCONF = 'mysite.urls'
 

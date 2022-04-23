@@ -74,8 +74,9 @@ def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
 
 
     
-def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,AdreCrit=False ,\
-     Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0):
+def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=False ,\
+     Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0,dodgeNumber=0,\
+         couvertNumber=0,perforantNumber=0):
     
     print("numberAttWhiteDice : ",numberAttWhiteDice)
     print("numberAttBlackDice : ",numberAttBlackDice)
@@ -88,6 +89,7 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
     listCrits = []
     listHits = []
     listMiss = []
+    listWound = []
     
     if (attOrDef =='att'):
         
@@ -124,8 +126,64 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
             listCrits.append(ListThrow[0])
             listHits.append(ListThrow[1])
             listMiss.append(ListThrow[2])
+
+
+            #################
+            #DEFENCE 
+            #################
+
+            #Couvert
+            if (couvertNumber>0):
+                for i in range( min(couvertNumber,ListThrow[1])):
+                    ListThrow[1]-=1
+
+            #Dodge:
+            if (dodgeNumber>0):
+                for i in range( min(dodgeNumber,ListThrow[1])):
+                    ListThrow[1]-=1
+
+            #Tireur embusqué
+
+            #Full Armor 
+            if (fullArmor):
+                ListThrow[1]=0
+
+            #Armor Number 
+            if (armorNumber>0):
+                for i in range( min(armorNumber,ListThrow[1])):
+                    ListThrow[1]-=1
+
+            numberOfSave=ListThrow[0]+ListThrow[1]
+
+
+            sumResult=0
+            #Dice def 
+            if (DefDiceUsed=="rdef"):
+                for i in range(numberOfSave):
+                    result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefRed,adredef)
+                    sumResult+=result
+
+            if (DefDiceUsed=="wdef"):
+                for i in range(numberOfSave):
+                    result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefWhite,adredef)
+                    sumResult+=result
+
+            #Perforant
+            if (perforantNumber>0):
+                for i in range( min(perforantNumber,sumResult)):
+                    sumResult-=1
+                 
+            
+            #Wound Total 
+            listWound.append(numberOfSave-sumResult)
+            
+
+
+
+
             
     
+
 
 
         #MEAN
@@ -135,10 +193,13 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
         listHits = 1000*np.array(listHits)
         listMiss = 1000*np.array(listMiss)
 
+        listWound = 1000*np.array(listWound)
+
         return statistics.mean(listEsperance)/1000,\
         statistics.mean(listCrits)/1000,\
         statistics.mean(listHits)/1000,\
-        statistics.mean(listMiss)/1000
+        statistics.mean(listMiss)/1000,\
+        statistics.mean(listWound)/1000
     
 
 
@@ -166,7 +227,7 @@ def oneThrowDef(ListThrow,NumberHits,Adre):
         return 0,ListThrow
 
   
-def throwDiceDEF(numberDefWhiteDice,numberDefRedDice, Adre=False,numberThrow=50000,attOrDef ='def'):
+def throwDiceDEF(numberDefWhiteDice,numberDefRedDice, Adre=False,numberThrow=1,attOrDef ='def'):
     
     print("numberAttWhiteDice : ",numberDefWhiteDice)
     print("numberAttBlackDice : ",numberDefRedDice)

@@ -75,26 +75,35 @@ def outputattRequest(request):
 
         critiqueNumber = request.POST.get('critical', 0)
         impactNumber = request.POST.get('impact', 0)
+        perforantNumber = request.POST.get('perforant', 0)
 
+        adredef= request.POST.get('adredef',0)
         fullArmor = request.POST.get('fullarmure', 0)
         armorNumber = request.POST.get('armure', 0)
+        dodgeNumber = request.POST.get('dodge', 0)
+        couvertNumber = request.POST.get('couvert', 0)
+        
 
         numberAttRedDice=trad(numberAttRedDice)
         numberAttBlackDice=trad(numberAttBlackDice)
         numberAttWhiteDice=trad(numberAttWhiteDice)
         AdreConvertCrit=tradCheckBox(AdreConvertCrit)
         AdreConvert=tradCheckBox(AdreConvert)
-
+    
+        adredef=tradCheckBox(adredef)
         fullArmor=tradCheckBox(fullArmor)
 
         critiqueNumber=trad(critiqueNumber)
         impactNumber=trad(impactNumber)
-        armorNumber=trad(armorNumber)
+        perforantNumber=trad(perforantNumber)
 
-        
+        armorNumber=trad(armorNumber)
+        dodgeNumber=trad(dodgeNumber)
+        couvertNumber=trad(couvertNumber)
+
     
 
-        resultedEsperance,crits,hits,miss = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber)  
+        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber)  
 
         print("Resulted Esperance : ", resultedEsperance)
         dict= {
@@ -104,6 +113,7 @@ def outputattRequest(request):
             'crits':round(crits,2),
             'hits':round(hits,2),
             'miss':round(miss,2),
+            'wounds':round(wounds,2),
         
             }
         

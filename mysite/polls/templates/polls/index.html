@@ -58,6 +58,10 @@
             <input type="number" name="impact" class="form__input" id="name" placeholder="Impact"  />
             <label for="name" class="form__label">Impact</label>
           </div>
+          <div class="form__group">
+            <input type="number" name="perforant" class="form__input" id="name" placeholder="Perforant"  />
+            <label for="name" class="form__label">Perforant</label>
+          </div>
 
       </div>
 
@@ -87,7 +91,17 @@
           </label>
 
           <div class="form__group">
-            <input type="number" name="armure" class="form__input" id="name" placeholder="Armor"  />
+            <input type="number" name="dodge" class="form__input" id="name" placeholder="Dodge"  />
+            <label for="name" class="form__label">Dodge</label>
+          </div>
+
+          <div class="form__group">
+            <input type="number" name="couvert" class="form__input" id="name" placeholder="Couvert"  />
+            <label for="name" class="form__label">Couvert</label>
+          </div>
+
+          <div class="form__group">
+            <input type="number" name="armure" class="form__input" id="name" placeholder="Armure"  />
             <label for="name" class="form__label">Armure</label>
           </div>
 
@@ -122,8 +136,12 @@
     <br>  <br>
   
     <h2>Moyenne de touche  </h2>
-    <h3>{{resultedEsperance}}</h3>
-  
+    <h3 id="green">{{resultedEsperance}}</h3>
+    <br>  <br>
+
+    <h2>Moyenne de Blessures  </h2>
+    <h3 id="red">{{wounds}}</h3>
+
     </div>
     {% endif %}
   
