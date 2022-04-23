@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SWL Dice Simulator</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/button.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/both.css' %}">
+ 
  
 
 </head>
@@ -18,122 +18,125 @@
 
 <body>
 
-
-<div class = "maindiv">
-  <div class ="formcontainer">
-    <div class="header">
-
-      <h1>Dés Attaque</h1>
-      <form action="outputatt" method="POST">
-        {% csrf_token %}
-        <div class="form__group">
-          <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" />
-          <label for="name" class="form__label">Rouge Attack</label>
-        </div>
-        <div class="form__group">
-          <input type="number" name="natt" class="form__input" id="name" placeholder="Noir Attack"  />
-          <label for="name" class="form__label">Noir Attack</label>
-        </div>
-
-        <div class="form__group">
-          <input type="number" name="watt" class="form__input" id="name" placeholder="Blanc Attack"  />
-          <label for="name" class="form__label">Blanc Attack</label>
-        </div>
-
-        <h1>Adrenaline</h1>
-        <label class="container">Adre Crit
-          <input type="checkbox" name="adrecrit">
-          <span class="checkmark"></span>
-        </label>
-        <label class="container">Adre Touche
-          <input type="checkbox" name="adretouche">
-          <span class="checkmark"></span>
-        </label>
-
-        <div class="form__group">
-          <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  />
-          <label for="name" class="form__label">Critical</label>
-        </div>
-
-        <div class="form__group">
-          <button class="button-87" role="button">Valider</button>
-        </div>
-
-      </form>
+  <div class = "maindiv">
+    <div class ="formcontainer">
+      <div class="header">
+  
+        <h1>Dés Attaque</h1>
+        <form action="outputatt" method="POST">
+          {% csrf_token %}
+          <div class="form__group">
+            <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" />
+            <label for="name" class="form__label">Rouge Attack</label>
+          </div>
+          <div class="form__group">
+            <input type="number" name="natt" class="form__input" id="name" placeholder="Noir Attack"  />
+            <label for="name" class="form__label">Noir Attack</label>
+          </div>
+  
+          <div class="form__group">
+            <input type="number" name="watt" class="form__input" id="name" placeholder="Blanc Attack"  />
+            <label for="name" class="form__label">Blanc Attack</label>
+          </div>
+  
+          <h1>Adrenaline</h1>
+          <label class="container">Adre Crit
+            <input type="checkbox" name="adrecrit">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Adre Touche
+            <input type="checkbox" name="adretouche">
+            <span class="checkmark"></span>
+          </label>
+  
+          <div class="form__group">
+            <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  />
+            <label for="name" class="form__label">Critical</label>
+          </div>
+  
+          <div class="form__group">
+            <button class="button-87" role="button">Valider</button>
+          </div>
+  
+        </form>
+      </div>
+  
+  
+      <div class="header2">
+        <h1>Dés Défense</h1>
+        <form action="outputdef" method="POST">
+          {% csrf_token %}
+          <div class="form__group">
+            <input type="number" name="rdef" class="form__input" id="name" placeholder="Rouge Defense" />
+            <label for="name" class="form__label">Rouge Defense</label>
+          </div>
+  
+  
+          <div class="form__group">
+            <input type="number" name="wdef" class="form__input" id="name" placeholder="Blanc Defense"  />
+            <label for="name" class="form__label">Blanc Defense</label>
+          </div>
+  
+          <h1>Adrenaline</h1>
+          <label class="container">Adre Bouclier
+            <input type="checkbox" name="adredef" >
+            <span class="checkmark"></span>
+          </label>
+  
+  
+          <div class="form__group">
+            <button class="button-87" role="button">Valider</button>
+          </div>
+  
+        </form>
+      </div>
     </div>
-
-
-    <div class="header2">
-      <h1>Dés Défense</h1>
-      <form action="outputdef" method="POST">
-        {% csrf_token %}
-        <div class="form__group">
-          <input type="number" name="rdef" class="form__input" id="name" placeholder="Rouge Defense" />
-          <label for="name" class="form__label">Rouge Defense</label>
-        </div>
-
-
-        <div class="form__group">
-          <input type="number" name="wdef" class="form__input" id="name" placeholder="Blanc Defense"  />
-          <label for="name" class="form__label">Blanc Defense</label>
-        </div>
-
-        <h1>Adrenaline</h1>
-        <label class="container">Adre Bouclier
-          <input type="checkbox" name="adredef" >
-          <span class="checkmark"></span>
-        </label>
-
-
-        <div class="form__group">
-          <button class="button-87" role="button">Valider</button>
-        </div>
-
-      </form>
-    </div>
-  </div>
-
-  {% if output == True %}
-
-  {% if outputatt == True %}
-  <div class="result" id="tv">
-
-  <h1 id="black">Results :</h1>
-  <h2>Moyenne de Crit</h2>
-  <h3>{{crits}}</h3>
-  <br>  <br>
-  <h2>Moyenne de Touche</h2>
-  <h3>{{hits}}</h3>
-  <br>  <br>
-  <h2>Moyenne de Miss</h2>
-  <h3>{{miss}}</h3>
-  <br>  <br>
-
-  <h2>Nombre Moyenne de touche : </h2>
-  <h3>{{resultedEsperance}}</h3>
-
-  </div>
-  {% endif %}
-
-  {% if outputdef == True %}
-  <div class="result" id = 'tv'>
-
+  
+    {% if output == True %}
+  
+    {% if outputatt == True %}
+    <div class="result" id="tv">
+  
     <h1 id="black">Results :</h1>
-    <h2>Moyenne de Defense</h2>
-    <h3>{{defs}}</h3>
+    <h2>Moyenne de Crit</h2>
+    <br>
+    <h3>{{crits}}</h3>
+    <br>  <br>
+    <h2>Moyenne de Touche</h2>
+    <br>
+    <h3>{{hits}}</h3>
     <br>  <br>
     <h2>Moyenne de Miss</h2>
+    <br>
     <h3>{{miss}}</h3>
     <br>  <br>
   
-    <h2>Nombre Moyenne de Defense : </h2>
+    <h2>Moyenne de touche  </h2>
     <h3>{{resultedEsperance}}</h3>
   
     </div>
+    {% endif %}
   
-  {% endif %}
-  {% endif %}
-</div>
+    {% if outputdef == True %}
+    <div class="result" id = 'tv'>
+  
+      <h1 id="black">Results :</h1>
+      <h2>Moyenne de Defense</h2>
+      <h3>{{defs}}</h3>
+      <br>  <br>
+      <h2>Moyenne de Miss</h2>
+      <h3>{{miss}}</h3>
+      <br>  <br>
+    
+      <h2>Moyenne de Defense : </h2>
+      <h3>{{resultedEsperance}}</h3>
+    
+      </div>
+    
+    {% endif %}
+    {% endif %}
+  </div>
+
 
 
 <script>
