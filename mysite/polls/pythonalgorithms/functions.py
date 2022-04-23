@@ -1,5 +1,4 @@
 import random as rd
-from select import KQ_FILTER_AIO
 import statistics
 import numpy as np
 
