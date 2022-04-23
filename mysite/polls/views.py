@@ -71,75 +71,43 @@ def outputattRequest(request):
         AdreConvertCrit = request.POST.get('adrecrit', 0)
         AdreConvert = request.POST.get('adretouche', 0)
 
-        critiqueNumber = request.POST.get('critical', 0)
+        DefDiceUsed = request.POST.get('defdices', 0)
 
+        critiqueNumber = request.POST.get('critical', 0)
+        impactNumber = request.POST.get('impact', 0)
+
+        fullArmor = request.POST.get('fullarmure', 0)
+        armorNumber = request.POST.get('armure', 0)
 
         numberAttRedDice=trad(numberAttRedDice)
         numberAttBlackDice=trad(numberAttBlackDice)
         numberAttWhiteDice=trad(numberAttWhiteDice)
         AdreConvertCrit=tradCheckBox(AdreConvertCrit)
         AdreConvert=tradCheckBox(AdreConvert)
-        critiqueNumber=trad(critiqueNumber)
 
-        resultedEsperance,crits,hits,miss = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber)  
+        fullArmor=tradCheckBox(fullArmor)
+
+        critiqueNumber=trad(critiqueNumber)
+        impactNumber=trad(impactNumber)
+        armorNumber=trad(armorNumber)
+
+        
+    
+
+        resultedEsperance,crits,hits,miss = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber)  
 
         print("Resulted Esperance : ", resultedEsperance)
         dict= {
             'output':True,
             'outputatt':True,
-            'outputdef':False,
-            'resultedEsperance':resultedEsperance,
-            'crits':crits,
-            'hits':hits,
-            'miss':miss,
+            'resultedEsperance':round(resultedEsperance,2),
+            'crits':round(crits,2),
+            'hits':round(hits,2),
+            'miss':round(miss,2),
         
             }
         
         return render(request, 'polls/index.html',dict)  
-
- 
-def outputdefRequest(request):
-
-    if request.method == 'GET':
-
-        
-        dictGlobal = { 
-            'output':False
-        }
-
-        return render(request, 'polls/index.html',dictGlobal)  
-
-    if request.method == 'POST':
-
-
-        numberDefRedDice = request.POST.get('rdef', 0)
-        numberDefWhiteDice = request.POST.get('wdef', 0)
-
-        AdreConvert = request.POST.get('adredef', 0)
-
-        numberDefRedDice=trad(numberDefRedDice)
-        numberDefWhiteDice=trad(numberDefWhiteDice)
-        AdreConvert=tradCheckBox(AdreConvert)
-
-        resultedEsperance,defs,miss = throwDiceDEF(numberDefWhiteDice,numberDefRedDice, Adre=AdreConvert)
-
-        print("Resulted Esperance : ", resultedEsperance)
-        dict= {
-            'output':True,
-            'outputatt':False,
-            'outputdef':True,
-            'resultedEsperance':resultedEsperance,
-            'defs':defs,
-            'miss':miss,
-        
-            }
-        
-        return render(request, 'polls/index.html',dict)  
-
- 
-
-
-  
 
 
   

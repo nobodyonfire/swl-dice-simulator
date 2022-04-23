@@ -34,17 +34,23 @@ NumberHitsDefWhite = 1
 
 # ListThrow [Def,Miss]
 
+
+
 def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
     tmp=0
     random = rd.randint(1,8)
+
+    #CRITS
     if random == 1:
         ListThrow[0]+=1
         return 1 ,NumberCritical,ListThrow
     
+    #HITS
     elif 3<= random <3+NumberHits:
         ListThrow[1]+=1
         return 1,NumberCritical,ListThrow
     
+    #ADRE
     elif random ==2:
         if AdreCrit:
             ListThrow[0]+=1
@@ -60,6 +66,7 @@ def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
             ListThrow[2]+=1
             return 0,NumberCritical,ListThrow
 
+    #MISS
     else :
         ListThrow[2]+=1
         return 0,NumberCritical,ListThrow
@@ -67,7 +74,8 @@ def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
 
 
     
-def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,AdreCrit=False , Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0):
+def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,AdreCrit=False ,\
+     Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0):
     
     print("numberAttWhiteDice : ",numberAttWhiteDice)
     print("numberAttBlackDice : ",numberAttBlackDice)
@@ -102,6 +110,15 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,AdreCrit=Fa
                 result, NumberCritical, ListThrow= oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,Adre)
                 esperance += result
                 
+            #print(fullArmor,armorNumber)
+
+            #IMPACT 
+            if (fullArmor or armorNumber>0):
+                for i in range(impactNumber):
+                    if (ListThrow[1])>0:
+                        ListThrow[1]-=1
+                        ListThrow[0]+=1
+
 
             listEsperance.append(esperance)
             listCrits.append(ListThrow[0])
@@ -109,6 +126,9 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,AdreCrit=Fa
             listMiss.append(ListThrow[2])
             
     
+
+
+        #MEAN
         listEsperance = 1000*np.array(listEsperance)
 
         listCrits = 1000*np.array(listCrits)

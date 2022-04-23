@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SWL Dice Simulator</title>
     <link rel="stylesheet" type="text/css" href="{% static 'polls/both.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/selectDef.css' %}">
  
  
 
@@ -53,42 +54,51 @@
             <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  />
             <label for="name" class="form__label">Critical</label>
           </div>
-  
           <div class="form__group">
-            <button class="button-87" role="button">Valider</button>
+            <input type="number" name="impact" class="form__input" id="name" placeholder="Impact"  />
+            <label for="name" class="form__label">Impact</label>
           </div>
-  
-        </form>
+
       </div>
+
+      
   
   
       <div class="header2">
         <h1>Dés Défense</h1>
-        <form action="outputdef" method="POST">
-          {% csrf_token %}
-          <div class="form__group">
-            <input type="number" name="rdef" class="form__input" id="name" placeholder="Rouge Defense" />
-            <label for="name" class="form__label">Rouge Defense</label>
+
+          <div class="box">
+            <select name ="defdices">
+              <option>No Defense</option>
+              <option value="rdef">Rouge Defense</option>
+              <option value="wdef">Blanc Defense</option>
+            </select>
           </div>
-  
-  
-          <div class="form__group">
-            <input type="number" name="wdef" class="form__input" id="name" placeholder="Blanc Defense"  />
-            <label for="name" class="form__label">Blanc Defense</label>
-          </div>
-  
+
           <h1>Adrenaline</h1>
           <label class="container">Adre Bouclier
             <input type="checkbox" name="adredef" >
             <span class="checkmark"></span>
           </label>
+
+          <label class="container">Full Armure
+            <input type="checkbox" name="fullarmure">
+            <span class="checkmark"></span>
+          </label>
+
+          <div class="form__group">
+            <input type="number" name="armure" class="form__input" id="name" placeholder="Armor"  />
+            <label for="name" class="form__label">Armure</label>
+          </div>
+
+          
+
   
   
           <div class="form__group">
             <button class="button-87" role="button">Valider</button>
           </div>
-  
-        </form>
+
       </div>
     </div>
   
@@ -117,23 +127,6 @@
     </div>
     {% endif %}
   
-    {% if outputdef == True %}
-    <div class="result" id = 'tv'>
-  
-      <h1 id="black">Results :</h1>
-      <h2>Moyenne de Defense</h2>
-      <h3>{{defs}}</h3>
-      <br>  <br>
-      <h2>Moyenne de Miss</h2>
-      <h3>{{miss}}</h3>
-      <br>  <br>
-    
-      <h2>Moyenne de Defense : </h2>
-      <h3>{{resultedEsperance}}</h3>
-    
-      </div>
-    
-    {% endif %}
     {% endif %}
   </div>
 
