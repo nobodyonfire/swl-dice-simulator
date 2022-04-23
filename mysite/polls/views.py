@@ -72,7 +72,8 @@ def outputattRequest(request):
         AdreConvert = request.POST.get('adretouche', 0)
 
         DefDiceUsed = request.POST.get('defdices', 0)
-
+        
+        surgeNumber = request.POST.get('surge', 0)
         critiqueNumber = request.POST.get('critical', 0)
         impactNumber = request.POST.get('impact', 0)
         perforantNumber = request.POST.get('perforant', 0)
@@ -82,6 +83,11 @@ def outputattRequest(request):
         armorNumber = request.POST.get('armure', 0)
         dodgeNumber = request.POST.get('dodge', 0)
         couvertNumber = request.POST.get('couvert', 0)
+        dangersensNumber = request.POST.get('dangersens', 0)
+        coupdechanceNumber = request.POST.get('coupdechance', 0)
+        surgeDefNumber = request.POST.get('surgedef', 0)
+        
+        
         
 
         numberAttRedDice=trad(numberAttRedDice)
@@ -100,10 +106,14 @@ def outputattRequest(request):
         armorNumber=trad(armorNumber)
         dodgeNumber=trad(dodgeNumber)
         couvertNumber=trad(couvertNumber)
+        dangersensNumber=trad(dangersensNumber)
+        coupdechanceNumber=trad(coupdechanceNumber)
+        surgeNumber=trad(surgeNumber)
+        surgeDefNumber=trad(surgeDefNumber)
 
     
 
-        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber)  
+        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber,dangersensNumber=dangersensNumber,coupdechanceNumber=coupdechanceNumber,surgeNumber=surgeNumber,surgeDefNumber=surgeDefNumber)  
 
         print("Resulted Esperance : ", resultedEsperance)
         dict= {

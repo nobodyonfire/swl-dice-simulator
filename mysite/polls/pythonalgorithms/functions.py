@@ -1,4 +1,5 @@
 import random as rd
+from select import KQ_FILTER_AIO
 import statistics
 import numpy as np
 
@@ -36,47 +37,52 @@ NumberHitsDefWhite = 1
 
 
 
-def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,Adre):
+def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,NumberSurge,Adre):
     tmp=0
     random = rd.randint(1,8)
 
     #CRITS
     if random == 1:
         ListThrow[0]+=1
-        return 1 ,NumberCritical,ListThrow
+        return 1 ,NumberCritical,NumberSurge,ListThrow
     
     #HITS
     elif 3<= random <3+NumberHits:
         ListThrow[1]+=1
-        return 1,NumberCritical,ListThrow
+        return 1,NumberCritical,NumberSurge,ListThrow
     
     #ADRE
     elif random ==2:
         if AdreCrit:
             ListThrow[0]+=1
-            return 1,NumberCritical,ListThrow
+            return 1,NumberCritical,NumberSurge,ListThrow
         elif NumberCritical >0:
             ListThrow[0]+=1
             NumberCritical-=1
-            return 1,NumberCritical,ListThrow
+            return 1,NumberCritical,NumberSurge,ListThrow
+        elif NumberSurge >0:
+            ListThrow[0]+=1
+            NumberSurge-=1
+            return 1,NumberCritical,NumberSurge,ListThrow
         elif Adre:
             ListThrow[1]+=1
-            return 1,NumberCritical,ListThrow
+            return 1,NumberCritical, NumberSurge,ListThrow
         else:
             ListThrow[2]+=1
-            return 0,NumberCritical,ListThrow
+            return 0,NumberCritical,NumberSurge,ListThrow
 
     #MISS
     else :
         ListThrow[2]+=1
-        return 0,NumberCritical,ListThrow
+        return 0,NumberCritical,NumberSurge,ListThrow
     
 
 
     
 def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=False ,\
      Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0,dodgeNumber=0,\
-         couvertNumber=0,perforantNumber=0):
+         couvertNumber=0,perforantNumber=0,dangersensNumber=0,coupdechanceNumber=0,surgeNumber=0,surgeDefNumber=0\
+         ):
     
     print("numberAttWhiteDice : ",numberAttWhiteDice)
     print("numberAttBlackDice : ",numberAttBlackDice)
@@ -97,19 +103,21 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
         for throw in range (numberThrow):
             
             NumberCritical = critiqueNumber
+            NumberSurge = surgeNumber
+            NumberSurgeDef = surgeDefNumber
             esperance=0
             ListThrow=[0,0,0]
     
             for i in range(numberAttWhiteDice):
-                result, NumberCritical,ListThrow = oneThrow(ListThrow,NumberHitsAttWhite,AdreCrit,NumberCritical,Adre)
+                result, NumberCritical,NumberSurge,ListThrow = oneThrow(ListThrow,NumberHitsAttWhite,AdreCrit,NumberCritical,NumberSurge,Adre)
                 esperance += result
                 
             for i in range(numberAttBlackDice):
-                result, NumberCritical, ListThrow= oneThrow(ListThrow,NumberHitsAttBlack,AdreCrit,NumberCritical,Adre)
+                result, NumberCritical,NumberSurge, ListThrow= oneThrow(ListThrow,NumberHitsAttBlack,AdreCrit,NumberCritical,NumberSurge,Adre)
                 esperance += result
                 
             for i in range(numberAttRedDice):
-                result, NumberCritical, ListThrow= oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,Adre)
+                result, NumberCritical,NumberSurge, ListThrow= oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,NumberSurge,Adre)
                 esperance += result
                 
             #print(fullArmor,armorNumber)
@@ -155,18 +163,38 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
 
             numberOfSave=ListThrow[0]+ListThrow[1]
 
-
             sumResult=0
+
+            #Danger Sens 
+
             #Dice def 
             if (DefDiceUsed=="rdef"):
-                for i in range(numberOfSave):
-                    result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefRed,adredef)
+                for i in range(numberOfSave+dangersensNumber):
+                    result, ListThrow,NumberSurgeDef=  oneThrowDef(ListThrow,NumberHitsDefRed,adredef,NumberSurgeDef)
                     sumResult+=result
+                
+                #Coup de chance 
+                if (coupdechanceNumber>0):
+                    for j in range(coupdechanceNumber):
+                        if(sumResult<numberOfSave):
+                            result, ListThrow,NumberSurgeDef=  oneThrowDef(ListThrow,NumberHitsDefRed,adredef,NumberSurgeDef)
+                            sumResult+=result
+
 
             if (DefDiceUsed=="wdef"):
-                for i in range(numberOfSave):
-                    result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefWhite,adredef)
+                for i in range(numberOfSave+dangersensNumber):
+                    result, ListThrow,NumberSurgeDef =  oneThrowDef(ListThrow,NumberHitsDefWhite,adredef,NumberSurgeDef)
                     sumResult+=result
+
+                #Coup de chance 
+                if (coupdechanceNumber>0):
+                    for j in range(coupdechanceNumber):
+                        if(sumResult<numberOfSave):
+                            result, ListThrow,NumberSurgeDef=  oneThrowDef(ListThrow,NumberHitsDefWhite,adredef,NumberSurgeDef)
+                            sumResult+=result
+                
+            
+
 
             #Perforant
             if (perforantNumber>0):
@@ -175,7 +203,11 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                  
             
             #Wound Total 
-            listWound.append(numberOfSave-sumResult)
+            if(sumResult>numberOfSave):
+                listWound.append(0)
+            else:
+                listWound.append(numberOfSave-sumResult)
+
             
 
 
@@ -205,67 +237,29 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
 
 
 
-def oneThrowDef(ListThrow,NumberHits,Adre):
+def oneThrowDef(ListThrow,NumberHits,Adre,NumberSurgeDef):
     tmp=0
     random = rd.randint(1,6)
 
     if 2<= random <2+NumberHits:
         ListThrow[0]+=1
-        return 1,ListThrow
+        return 1,ListThrow,NumberSurgeDef
     
     elif random ==1:
        
         if Adre:
             ListThrow[0]+=1
-            return 1,ListThrow
+            return 1,ListThrow,NumberSurgeDef
+        elif NumberSurgeDef>0:
+            NumberSurgeDef-=1
+            ListThrow[0]+=1
+            return 1,ListThrow,NumberSurgeDef
         else:
             ListThrow[1]+=1
-            return 0,ListThrow
+            return 0,ListThrow,NumberSurgeDef
 
     else :
         ListThrow[1]+=1
-        return 0,ListThrow
+        return 0,ListThrow,NumberSurgeDef
 
-  
-def throwDiceDEF(numberDefWhiteDice,numberDefRedDice, Adre=False,numberThrow=1,attOrDef ='def'):
-    
-    print("numberAttWhiteDice : ",numberDefWhiteDice)
-    print("numberAttBlackDice : ",numberDefRedDice)
-    print("Adre               : ",Adre)
-
-    listEsperance =[]
-    listDef = []
-    listMiss = []
-    
-    if (attOrDef =='def'):
-        
-        #NUMBER OF THROW:
-        for throw in range (numberThrow):
-            
-            esperance=0
-            ListThrow=[0,0]
-    
-            for i in range(numberDefWhiteDice):
-                result,ListThrow = oneThrowDef(ListThrow,NumberHitsDefWhite,Adre)
-                esperance += result
-                
-            for i in range(numberDefRedDice):
-                result, ListThrow=  oneThrowDef(ListThrow,NumberHitsDefRed,Adre)
-                esperance += result
-                
-        
-
-            listEsperance.append(esperance)
-            listDef.append(ListThrow[0])
-            listMiss.append(ListThrow[1])
-            
-    
-        listEsperance = 1000*np.array(listEsperance)
-
-        listDef = 1000*np.array(listDef)
-        listMiss = 1000*np.array(listMiss)
-
-        return statistics.mean(listEsperance)/1000,\
-        statistics.mean(listDef)/1000,\
-        statistics.mean(listMiss)/1000
     

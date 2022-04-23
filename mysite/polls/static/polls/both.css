@@ -10,12 +10,15 @@ h1 {
     margin-bottom: 20px;
     margin-top:20px;
     text-align: center;
+    color:rgb(255, 255, 255);
+    font-size: 40px;
 }
 
 body {
     background-image: url("../images/infoimages.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
+    color:rgb(255, 255, 255);
 }
 
 .form__group{
@@ -108,7 +111,7 @@ h2{
     font-size: 30px;
 }
 #black{
-    color:#000000 !important;
+    color:#dfd2b6 !important;
     font-size: 40px;
 
 }
@@ -159,6 +162,7 @@ h3{
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    margin-bottom: 30px;
   }
   
   .button-87:hover {
