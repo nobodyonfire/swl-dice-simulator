@@ -34,6 +34,8 @@ NumberHitsDefWhite = 1
 
 # ListThrow [Def,Miss]
 
+# ListMiss [MissWhite, MissBlack, MissRed]
+
 
 
 def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,NumberSurge,Adre):
@@ -80,8 +82,8 @@ def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,NumberSurge,Adre):
     
 def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=False ,\
      Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0,dodgeNumber=0,\
-         couvertNumber=0,perforantNumber=0,dangersensNumber=0,coupdechanceNumber=0,surgeNumber=0,surgeDefNumber=0\
-         ):
+         couvertNumber=0,perforantNumber=0,dangersensNumber=0,coupdechanceNumber=0,surgeNumber=0,surgeDefNumber=0,\
+         HauteVelocite=False,aimNumber=0,preciseNumber=0):
     
     print("numberAttWhiteDice : ",numberAttWhiteDice)
     print("numberAttBlackDice : ",numberAttBlackDice)
@@ -106,20 +108,57 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
             NumberSurgeDef = surgeDefNumber
             esperance=0
             ListThrow=[0,0,0]
-    
+            ListMissPerDice = [0,0,0]
+
             for i in range(numberAttWhiteDice):
                 result, NumberCritical,NumberSurge,ListThrow = oneThrow(ListThrow,NumberHitsAttWhite,AdreCrit,NumberCritical,NumberSurge,Adre)
                 esperance += result
-                
+                ListMissPerDice[0]+=1-result
+            
+
             for i in range(numberAttBlackDice):
                 result, NumberCritical,NumberSurge, ListThrow= oneThrow(ListThrow,NumberHitsAttBlack,AdreCrit,NumberCritical,NumberSurge,Adre)
-                esperance += result
-                
+                esperance += result   
+                ListMissPerDice[1]+=1-result
+            
+
             for i in range(numberAttRedDice):
                 result, NumberCritical,NumberSurge, ListThrow= oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,NumberSurge,Adre)
                 esperance += result
-                
-            #print(fullArmor,armorNumber)
+                ListMissPerDice[2]+=1-result 
+        
+
+            #AIM 
+            for i in range(aimNumber):
+
+                rerolled=2+preciseNumber
+
+                #RED
+                for i in range(ListMissPerDice[2]):
+                    if (rerolled>0):
+                        result, NumberCritical,NumberSurge,ListThrow = oneThrow(ListThrow,NumberHitsAttRed,AdreCrit,NumberCritical,NumberSurge,Adre)
+                        esperance += result
+                        ListMissPerDice[2]-=result
+                        rerolled-=1
+
+                #BLACK
+                for i in range(ListMissPerDice[1]):
+                    if (rerolled>0):
+                        result, NumberCritical,NumberSurge,ListThrow = oneThrow(ListThrow,NumberHitsAttBlack,AdreCrit,NumberCritical,NumberSurge,Adre)
+                        esperance += result
+                        ListMissPerDice[1]-=result
+                        rerolled-=1
+                    
+                #WHITE
+                for i in range(ListMissPerDice[0]):
+                    if (rerolled>0):
+                        result, NumberCritical,NumberSurge,ListThrow = oneThrow(ListThrow,NumberHitsAttWhite,AdreCrit,NumberCritical,NumberSurge,Adre)
+                        esperance += result
+                        ListMissPerDice[0]-=result
+                        rerolled-=1
+
+
+
 
             #IMPACT 
             if (fullArmor or armorNumber>0):
@@ -134,7 +173,6 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
             listHits.append(ListThrow[1])
             listMiss.append(ListThrow[2])
 
-
             #################
             #DEFENCE 
             #################
@@ -145,7 +183,7 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                     ListThrow[1]-=1
 
             #Dodge:
-            if (dodgeNumber>0):
+            if (dodgeNumber>0 and not(HauteVelocite)):
                 for i in range( min(dodgeNumber,ListThrow[1])):
                     ListThrow[1]-=1
 

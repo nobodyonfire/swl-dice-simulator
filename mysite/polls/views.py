@@ -70,6 +70,7 @@ def outputattRequest(request):
 
         AdreConvertCrit = request.POST.get('adrecrit', 0)
         AdreConvert = request.POST.get('adretouche', 0)
+        HauteVelocite = request.POST.get('hautevelocite', 0)
 
         DefDiceUsed = request.POST.get('defdices', 0)
         
@@ -86,7 +87,8 @@ def outputattRequest(request):
         dangersensNumber = request.POST.get('dangersens', 0)
         coupdechanceNumber = request.POST.get('coupdechance', 0)
         surgeDefNumber = request.POST.get('surgedef', 0)
-        
+        aimNumber = request.POST.get('aim', 0)
+        preciseNumber = request.POST.get('precise', 0)
         
         
 
@@ -95,6 +97,7 @@ def outputattRequest(request):
         numberAttWhiteDice=trad(numberAttWhiteDice)
         AdreConvertCrit=tradCheckBox(AdreConvertCrit)
         AdreConvert=tradCheckBox(AdreConvert)
+        HauteVelocite=tradCheckBox(HauteVelocite)
     
         adredef=tradCheckBox(adredef)
         fullArmor=tradCheckBox(fullArmor)
@@ -110,10 +113,12 @@ def outputattRequest(request):
         coupdechanceNumber=trad(coupdechanceNumber)
         surgeNumber=trad(surgeNumber)
         surgeDefNumber=trad(surgeDefNumber)
+        aimNumber=trad(aimNumber)
+        preciseNumber=trad(preciseNumber)
 
     
 
-        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber,dangersensNumber=dangersensNumber,coupdechanceNumber=coupdechanceNumber,surgeNumber=surgeNumber,surgeDefNumber=surgeDefNumber)  
+        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber,dangersensNumber=dangersensNumber,coupdechanceNumber=coupdechanceNumber,surgeNumber=surgeNumber,surgeDefNumber=surgeDefNumber,HauteVelocite=HauteVelocite,aimNumber=aimNumber,preciseNumber=preciseNumber)  
 
         print("Resulted Esperance : ", resultedEsperance)
         dict= {
