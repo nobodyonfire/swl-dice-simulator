@@ -123,7 +123,7 @@ h3{
 #tv {
     position: relative;
     width: 350px;
-    height: 700px;
+    height: 850px;
     background: white;
     border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
     color: white;
@@ -247,9 +247,31 @@ h3{
     }
 
 #green{
-    color:#439a26;
+    color:#379c16!important;
+}
+#yellow{
+    color:#b7a715 !important;
 }
 
 #red{
-    color:#9a1a00;
+    color:#9a1a00!important;
+}
+
+#red1{
+  color:#c6640e!important;
+}
+
+.MainModifications{
+
+  font-size: 25px;
+  color:#420e04 !important;
+  font-weight: bolder;
+
+}
+
+
+.Modifications{
+  font-size: 20px;
+  color:#6e1200 !important;
+  font-style: italic;
 }

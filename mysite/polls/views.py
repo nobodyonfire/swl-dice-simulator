@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.forms import ModelForm
 from .forms import formDice
 
+
 from .pythonalgorithms.functions import *
 
 
@@ -63,6 +64,10 @@ def outputattRequest(request):
 
     if request.method == 'POST':
 
+        form = formDice(request.POST)
+            
+
+
 
         numberAttRedDice = request.POST.get('ratt', 0)
         numberAttBlackDice = request.POST.get('natt', 0)
@@ -89,6 +94,7 @@ def outputattRequest(request):
         surgeDefNumber = request.POST.get('surgedef', 0)
         aimNumber = request.POST.get('aim', 0)
         preciseNumber = request.POST.get('precise', 0)
+        manoimpro = request.POST.get('manoimpro', 0)
         
         
 
@@ -98,6 +104,7 @@ def outputattRequest(request):
         AdreConvertCrit=tradCheckBox(AdreConvertCrit)
         AdreConvert=tradCheckBox(AdreConvert)
         HauteVelocite=tradCheckBox(HauteVelocite)
+        manoimpro=tradCheckBox(manoimpro)
     
         adredef=tradCheckBox(adredef)
         fullArmor=tradCheckBox(fullArmor)
@@ -116,9 +123,13 @@ def outputattRequest(request):
         aimNumber=trad(aimNumber)
         preciseNumber=trad(preciseNumber)
 
-    
 
-        resultedEsperance,crits,hits,miss,wounds = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber,dangersensNumber=dangersensNumber,coupdechanceNumber=coupdechanceNumber,surgeNumber=surgeNumber,surgeDefNumber=surgeDefNumber,HauteVelocite=HauteVelocite,aimNumber=aimNumber,preciseNumber=preciseNumber)  
+        resultedEsperance,crits,hits,miss,wounds,numbersaves = throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,manoimpro,\
+                 AdreCrit=AdreConvertCrit,Adre=AdreConvert,critiqueNumber = critiqueNumber,impactNumber=impactNumber,armorNumber=armorNumber,dodgeNumber=dodgeNumber,couvertNumber=couvertNumber,perforantNumber=perforantNumber,dangersensNumber=dangersensNumber,coupdechanceNumber=coupdechanceNumber,surgeNumber=surgeNumber,surgeDefNumber=surgeDefNumber,HauteVelocite=HauteVelocite,aimNumber=aimNumber,preciseNumber=preciseNumber)  
+
+
+        
+
 
         print("Resulted Esperance : ", resultedEsperance)
         dict= {
@@ -129,10 +140,18 @@ def outputattRequest(request):
             'hits':round(hits,2),
             'miss':round(miss,2),
             'wounds':round(wounds,2),
+            'numbersaves':round(numbersaves,2),
+
+            'armorNumber':armorNumber ,
+            'dodgeNumber':dodgeNumber,
+            'fullArmor':fullArmor,
+            'couvertNumber':couvertNumber
+
+
         
             }
         
         return render(request, 'polls/index.html',dict)  
 
 
-  
+

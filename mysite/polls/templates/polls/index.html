@@ -26,6 +26,9 @@
         <h1>Dés Attaque</h1>
         <form action="outputatt" method="POST">
           {% csrf_token %}
+
+  
+
           <div class="form__group">
             <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" />
             <label for="name" class="form__label">Rouge Attack</label>
@@ -109,6 +112,11 @@
             <span class="checkmark"></span>
           </label>
 
+          <label class="container">Manoeuvres Impro.
+            <input type="checkbox" name="manoimpro">
+            <span class="checkmark"></span>
+          </label>
+
           <div class="form__group">
             <input type="number" name="dodge" class="form__input" id="name" placeholder="Dodge"  />
             <label for="name" class="form__label">Dodge</label>
@@ -140,12 +148,14 @@
             <label for="name" class="form__label">Cp De Chance</label>
           </div>
 
+        
+
           
 
   
   
           <div class="form__group">
-            <button class="button-87" role="button">Valider</button>
+            <button class="button-87" role="button" onclick="formProcess()" >Valider</button>
           </div>
 
       </div>
@@ -157,25 +167,39 @@
     <div class="result" id="tv">
   
     <h1 id="black">Results :</h1>
-    <h2>Moyenne de Crit</h2>
-    <br>
-    <h3>{{crits}}</h3>
+    <br> <br> <hr> <br><br>
+    <h2 >Moyenne de Crit</h2> 
+    <h3 id="yellow">{{crits}}</h3>
     <br>  <br>
-    <h2>Moyenne de Touche</h2>
-    <br>
-    <h3>{{hits}}</h3>
-    <br>  <br>
-    <h2>Moyenne de Miss</h2>
-    <br>
-    <h3>{{miss}}</h3>
-    <br>  <br>
-  
-    <h2>Moyenne de touche  </h2>
-    <h3 id="green">{{resultedEsperance}}</h3>
+    <h2 >Moyenne de hits</h2>
+    <h3 id="green">{{hits}}</h3>
     <br>  <br>
 
-    <h2>Moyenne de Blessures  </h2>
+
+    <br> <hr>  <br>
+
+    <br>  <br>
+    <h2>Nombre dés défense</h2>
+    
+    <h3 id="red1">{{numbersaves}}</h3>
+    <br>  <br>
+
+
+    <h2>Moyenne de Blessures </h2>
     <h3 id="red">{{wounds}}</h3>
+
+
+    {% if armorNumber > 0 or fullArmor > 0 or fullArmor or couvertNumber > 0 or dodgeNumber > 0 %}
+    <br><br> <hr>  <br><br>
+    <p class="MainModifications">Modificateurs</p><br>
+  
+    
+    {% if armorNumber > 0 %}<p class="Modifications"> Armure {{armorNumber}}</p> {%endif%}
+    {% if fullArmor %}<p class="Modifications"> Full Armure </p> {%endif%}
+    {% if dodgeNumber > 0 %}<p class="Modifications"> Dodge {{dodgeNumber}}</p> {%endif%}
+    {% if couvertNumber > 0 %}<p class="Modifications"> Couvert {{couvertNumber}}</p> {%endif%}
+    <br>
+    {%endif%}
 
     </div>
     {% endif %}
@@ -184,9 +208,11 @@
   </div>
 
 
+  
+
+
 
 <script>
-
 
 
 

@@ -80,7 +80,7 @@ def oneThrow(ListThrow,NumberHits,AdreCrit,NumberCritical,NumberSurge,Adre):
 
 
     
-def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,AdreCrit=False ,\
+def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed,fullArmor,adredef,manoimpro,AdreCrit=False ,\
      Adre=False,numberThrow=50000,attOrDef ='att',critiqueNumber=0,impactNumber=0,armorNumber=0,dodgeNumber=0,\
          couvertNumber=0,perforantNumber=0,dangersensNumber=0,coupdechanceNumber=0,surgeNumber=0,surgeDefNumber=0,\
          HauteVelocite=False,aimNumber=0,preciseNumber=0):
@@ -91,12 +91,14 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
     print("AdreCrit           : ",AdreCrit)
     print("Adre               : ",Adre)
     print("critiqueNumber     : ",critiqueNumber)
+    print("dodgeNumber        : ",dodgeNumber)
 
     listEsperance =[]
     listCrits = []
     listHits = []
     listMiss = []
     listWound = []
+    listnumberOfSave = []
     
     if (attOrDef =='att'):
         
@@ -106,6 +108,7 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
             NumberCritical = critiqueNumber
             NumberSurge = surgeNumber
             NumberSurgeDef = surgeDefNumber
+            Numberdodge = dodgeNumber
             esperance=0
             ListThrow=[0,0,0]
             ListMissPerDice = [0,0,0]
@@ -141,6 +144,8 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                         ListMissPerDice[2]-=result
                         rerolled-=1
 
+                        ListThrow[2]=ListThrow[2] - 1
+
                 #BLACK
                 for i in range(ListMissPerDice[1]):
                     if (rerolled>0):
@@ -148,6 +153,8 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                         esperance += result
                         ListMissPerDice[1]-=result
                         rerolled-=1
+
+                        ListThrow[2]=ListThrow[2] - 1
                     
                 #WHITE
                 for i in range(ListMissPerDice[0]):
@@ -157,6 +164,7 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                         ListMissPerDice[0]-=result
                         rerolled-=1
 
+                        ListThrow[2]=ListThrow[2] - 1
 
 
 
@@ -182,9 +190,27 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                 for i in range( min(couvertNumber,ListThrow[1])):
                     ListThrow[1]-=1
 
+
+
+            #Manoeures improbables 
+            if (Numberdodge>0 and not(HauteVelocite) and  manoimpro):
+                
+                for i in range (ListThrow[0]):
+                    if (Numberdodge>0):
+                        Numberdodge-=1
+                        ListThrow[0]-=1
+                
+
+                for i in range (ListThrow[1]):
+                    if (Numberdodge>0):
+                        Numberdodge-=1
+                        ListThrow[1]-=1
+
+
+
             #Dodge:
-            if (dodgeNumber>0 and not(HauteVelocite)):
-                for i in range( min(dodgeNumber,ListThrow[1])):
+            if (Numberdodge>0 and not(HauteVelocite) and  not(manoimpro)):
+                for i in range( min(Numberdodge,ListThrow[1])):
                     ListThrow[1]-=1
 
             #Tireur embusqué
@@ -199,6 +225,7 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
                     ListThrow[1]-=1
 
             numberOfSave=ListThrow[0]+ListThrow[1]
+            listnumberOfSave.append(numberOfSave)
 
             sumResult=0
 
@@ -263,12 +290,15 @@ def throwDice(numberAttWhiteDice,numberAttBlackDice,numberAttRedDice,DefDiceUsed
         listMiss = 1000*np.array(listMiss)
 
         listWound = 1000*np.array(listWound)
+        listnumberOfSave = 1000*np.array(listnumberOfSave)
 
         return statistics.mean(listEsperance)/1000,\
         statistics.mean(listCrits)/1000,\
         statistics.mean(listHits)/1000,\
         statistics.mean(listMiss)/1000,\
-        statistics.mean(listWound)/1000
+        statistics.mean(listWound)/1000,\
+        statistics.mean(listnumberOfSave)/1000,\
+        
     
 
 
