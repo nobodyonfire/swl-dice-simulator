@@ -27,33 +27,45 @@
         <form action="outputatt" method="POST">
           {% csrf_token %}
 
-  
-
           <div class="form__group">
-            <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" />
+            <input type="number" name="ratt" class="form__input" id="name" placeholder="Rouge Attack" value="{{ ratt }}"/>
             <label for="name" class="form__label">Rouge Attack</label>
           </div>
           <div class="form__group">
-            <input type="number" name="natt" class="form__input" id="name" placeholder="Noir Attack"  />
+            <input type="number" name="natt" class="form__input" id="name" placeholder="Noir Attack"  value="{{ natt }}" />
             <label for="name" class="form__label">Noir Attack</label>
           </div>
   
           <div class="form__group">
-            <input type="number" name="watt" class="form__input" id="name" placeholder="Blanc Attack"  />
+            <input type="number" name="watt" class="form__input" id="name" placeholder="Blanc Attack"  value="{{ watt }}" />
             <label for="name" class="form__label">Blanc Attack</label>
           </div>
   
           <h1>Modifications</h1>
           <label class="container">Adre Crit
-            <input type="checkbox" name="adrecrit">
+            {% if adrecrit %}
+              <input type="checkbox" name="adrecrit" checked />
+            {% else %}   
+              <input type="checkbox" name="adrecrit"  />
+            {% endif %}
             <span class="checkmark"></span>
           </label>
           <label class="container">Adre Touche
-            <input type="checkbox" name="adretouche">
+            {% if adretouche %}
+              <input type="checkbox" name="adretouche"  checked />
+            {% else %}   
+              <input type="checkbox" name="adretouche"  />
+            {% endif %}
+            
             <span class="checkmark"></span>
           </label>
           <label class="container">Haut Vélocité
-            <input type="checkbox" name="hautevelocite">
+            {% if hautevelocite %}
+              <input type="checkbox" name="hautevelocite" checked />
+            {% else %}   
+              <input type="checkbox" name="hautevelocite"  />
+            {% endif %}
+            
             <span class="checkmark"></span>
           </label>
           <br>
@@ -103,17 +115,33 @@
           <h1>Modifications</h1>
 
           <label class="container">Adre Bouclier
-            <input type="checkbox" name="adredef" >
+
+            {% if adredef %}
+              <input type="checkbox" name="adredef" checked />
+            {% else %}   
+              <input type="checkbox" name="adredef"  />
+            {% endif %}
+           
             <span class="checkmark"></span>
           </label>
 
           <label class="container">Full Armure
-            <input type="checkbox" name="fullarmure">
+            {% if fullarmure %}
+              <input type="checkbox" name="fullarmure" checked />
+            {% else %}   
+              <input type="checkbox" name="fullarmure" />
+            {% endif %}
+            
             <span class="checkmark"></span>
           </label>
 
           <label class="container">Manoeuvres Impro.
-            <input type="checkbox" name="manoimpro">
+            {% if manoimpro %}
+              <input type="checkbox" name="manoimpro" checked/>
+            {% else %}   
+              <input type="checkbox" name="manoimpro" />
+            {% endif %}
+            
             <span class="checkmark"></span>
           </label>
 
@@ -149,16 +177,24 @@
           </div>
 
         
-
-          
-
-  
-  
           <div class="form__group">
-            <button class="button-87" role="button" onclick="formProcess()" >Valider</button>
+            <button class="button-87" role="button" >Valider</button>
+            
           </div>
+          
+        </form>
+
+          <form action="outputatt" method="GET">
+            {% csrf_token %}
+            <div class="form__group">
+              <button class="button-88" role="button" >Reset</button>
+            </div>
+
+        </form>
+
 
       </div>
+      
     </div>
   
     {% if output == True %}

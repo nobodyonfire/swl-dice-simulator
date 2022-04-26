@@ -67,8 +67,6 @@ def outputattRequest(request):
         form = formDice(request.POST)
             
 
-
-
         numberAttRedDice = request.POST.get('ratt', 0)
         numberAttBlackDice = request.POST.get('natt', 0)
         numberAttWhiteDice = request.POST.get('watt', 0)
@@ -145,10 +143,31 @@ def outputattRequest(request):
             'armorNumber':armorNumber ,
             'dodgeNumber':dodgeNumber,
             'fullArmor':fullArmor,
-            'couvertNumber':couvertNumber
+            'couvertNumber':couvertNumber,
 
+            "ratt" : request.POST.get('ratt', 0),
+            "natt" : request.POST.get('natt', 0),
+            "watt" : request.POST.get('watt', 0),
+            "adrecrit" : request.POST.get('adrecrit', 0),
+            "adretouche" : request.POST.get('adretouche', 0),
+            "hautevelocite" : request.POST.get('hautevelocite', 0),
+            "defdices" : request.POST.get('defdices', 0),
+            "surge" : request.POST.get('surge', 0),
+            "critical" : request.POST.get('critical', 0),
+            "impact" : request.POST.get('impact', 0),
+            "perforant" : request.POST.get('perforant', 0),
+            "adredef" : request.POST.get('adredef',0),
+            "fullarmure" : request.POST.get('fullarmure', 0),
+            "armure" : request.POST.get('armure', 0),
+            "dodge" : request.POST.get('dodge', 0),
+            "couvert" : request.POST.get('couvert', 0),
+            "dangersens" : request.POST.get('dangersens', 0),
+            "coupdechance" : request.POST.get('coupdechance', 0),
+            "surgedef" : request.POST.get('surgedef', 0),
+            "aim" : request.POST.get('aim', 0),
+            "precise" : request.POST.get('precise', 0),
+            "manoimpro" : request.POST.get('manoimpro', 0),
 
-        
             }
         
         return render(request, 'polls/index.html',dict)  
