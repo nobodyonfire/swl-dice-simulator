@@ -70,29 +70,29 @@
           </label>
           <br>
           <div class="form__group">
-            <input type="number" name="aim" class="form__input" id="name" placeholder="Aim"  />
+            <input type="number" name="aim" class="form__input" id="name" placeholder="Aim"  value="{{ aim }}"/>
             <label for="name" class="form__label">Aim</label>
           </div>
           <div class="form__group">
-            <input type="number" name="precise" class="form__input" id="name" placeholder="Precise"  />
+            <input type="number" name="precise" class="form__input" id="name" placeholder="Precise" value="{{ precise }}" />
             <label for="name" class="form__label">Precise</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="surge" class="form__input" id="name" placeholder="Surge"  />
+            <input type="number" name="surge" class="form__input" id="name" placeholder="Surge" value="{{ surge }}" />
             <label for="name" class="form__label">Surge</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  />
+            <input type="number" name="critical" class="form__input" id="name" placeholder="Critical"  value="{{ critical }}"/>
             <label for="name" class="form__label">Critical</label>
           </div>
           <div class="form__group">
-            <input type="number" name="impact" class="form__input" id="name" placeholder="Impact"  />
+            <input type="number" name="impact" class="form__input" id="name" placeholder="Impact" value="{{ impact }}" />
             <label for="name" class="form__label">Impact</label>
           </div>
           <div class="form__group">
-            <input type="number" name="perforant" class="form__input" id="name" placeholder="Perforant"  />
+            <input type="number" name="perforant" class="form__input" id="name" placeholder="Perforant" value="{{ perforant }}" />
             <label for="name" class="form__label">Perforant</label>
           </div>
 
@@ -106,9 +106,19 @@
 
           <div class="box">
             <select name ="defdices">
+              {% if defdices == "rdef" %}
+              <option value="rdef">Rouge Defense</option>
+              <option value="wdef">Blanc Defense</option>
+              <option>No Defense</option>
+              {% elif defdices == "wdef"%}
+              <option value="wdef">Blanc Defense</option>
+              <option value="rdef">Rouge Defense</option>
+              <option>No Defense</option>
+              {% else %}
               <option>No Defense</option>
               <option value="rdef">Rouge Defense</option>
               <option value="wdef">Blanc Defense</option>
+              {% endif %}
             </select>
           </div>
 
@@ -146,33 +156,33 @@
           </label>
 
           <div class="form__group">
-            <input type="number" name="dodge" class="form__input" id="name" placeholder="Dodge"  />
+            <input type="number" name="dodge" class="form__input" id="name" placeholder="Dodge"  value="{{ dodge }}"/>
             <label for="name" class="form__label">Dodge</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="couvert" class="form__input" id="name" placeholder="Couvert"  />
+            <input type="number" name="couvert" class="form__input" id="name" placeholder="Couvert" value="{{ couvert }}" />
             <label for="name" class="form__label">Couvert</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="armure" class="form__input" id="name" placeholder="Armure"  />
+            <input type="number" name="armure" class="form__input" id="name" placeholder="Armure" value="{{ armure }}" />
             <label for="name" class="form__label">Armure</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="surgedef" class="form__input" id="name" placeholder="Surge"  />
+            <input type="number" name="surgedef" class="form__input" id="name" placeholder="Surge"  value="{{ surgedef }}"/>
             <label for="name" class="form__label">Surge</label>
           </div>
 
           <div class="form__group">
-            <input type="number" name="dangersens" class="form__input" id="name" placeholder="Danger Sens"  />
+            <input type="number" name="dangersens" class="form__input" id="name" placeholder="Danger Sens" value="{{ dangersens }}" />
             <label for="name" class="form__label">Danger Sens</label>
           </div>
 
 
           <div class="form__group">
-            <input type="number" name="coupdechance" class="form__input" id="name" placeholder="Cp De Chance"  />
+            <input type="number" name="coupdechance" class="form__input" id="name" placeholder="Cp De Chance"  value="{{ coupdechance }}" />
             <label for="name" class="form__label">Cp De Chance</label>
           </div>
 
